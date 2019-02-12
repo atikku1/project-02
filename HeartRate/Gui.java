@@ -94,7 +94,7 @@ public class Gui extends JPanel implements ActionListener {
 		textPane.setFont(new Font("Tahoma", Font.BOLD, 12));
 		textPane.setEnabled(false);
 		textPane.setEditable(true);
-		textPane.setPreferredSize(new Dimension(200, 150));
+		textPane.setPreferredSize(new Dimension(200, 50));
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		panel.add(scrollPane);
@@ -216,8 +216,7 @@ public class Gui extends JPanel implements ActionListener {
 
 	// Method used to set the textPane data 
 	public void setTextPane(String data) {
-		String currentText = textPane.getText();
-		textPane.setText(currentText + "\n" + data);
+		textPane.setText("SERVER IS RUNNING..." + "\n" + data);
 	}
 
 	// Method used to start the GUI application
@@ -234,7 +233,9 @@ public class Gui extends JPanel implements ActionListener {
 			}
 		});
 		frame.pack();
-		frame.setPreferredSize(new Dimension(400, 400));
+		frame.setPreferredSize(new Dimension(367, 510));
+		frame.setMinimumSize(new Dimension(367, 510));
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 }
