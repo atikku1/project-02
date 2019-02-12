@@ -8,6 +8,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,9 +22,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
-import HeartRate.Gui;
+import Client.Subscriber;
 
-public class UIElement extends JPanel{
+public class UIElement extends JPanel implements Observer, ActionListener{
 
 	private ClientSubscriber subscriber;
 	
@@ -27,9 +32,12 @@ public class UIElement extends JPanel{
 	private JTextField ipAddress = new JTextField();
 	private JTextField port = new JTextField();
 	private JButton connect = new JButton();
-	
+	private final ExecutorService service;
 	
 	public  UIElement(ClientSubscriber subscriber) {
+
+		service = Executors.newCachedThreadPool();
+
 		this.setBackground(Color.WHITE);
 		this.setLayout(new FlowLayout());
 		
@@ -51,12 +59,10 @@ public class UIElement extends JPanel{
 		buttons.add(port);
 		buttons.add(connect);
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
-		
+		connect.addActionListener(this);
 		return buttons;
 	}
-	
-	
-	
+
 	Component createMainPanel() {
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setBackground(Color.WHITE);
@@ -68,42 +74,51 @@ public class UIElement extends JPanel{
 
 		JScrollPane scrollPane = new JScrollPane(this.dataPane);
 		panel.add(scrollPane);
-
 		return panel;
 
 	}
-	
-	public JTextPane getDataPane() {
-		return dataPane;
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(connect.isEnabled()){
+			connect.setEnabled(false);
+			subscriber.setIp(ipAddress.getText());
+			subscriber.setPort(Integer.parseInt(port.getText()));
+			service.submit(subscriber);
+			subscriber.addObserver(this);
+		} else{
+			shutdown();
+		}
 	}
 
-	public void setDataPane(JTextPane dataPane) {
-		this.dataPane = dataPane;
+	@Override
+	public void update(Observable o, Object arg) {
+		String data = ((ClientSubscriber) o).getObject().toString();
+		dataPane.setText(dataPane.getText() + "\n" + data);
+		this.getParent().revalidate();
+		this.getParent().repaint();
+		if (data.compareTo("FIN") != 0) {
+
+		}
+		else {
+			close();
+			connect.setEnabled(true);
+		}
 	}
 
-	public JTextField getIpAddress() {
-		return ipAddress;
+	private void close() {
+		System.out.println("clossing ....... +++++++");
+		subscriber.stop();
 	}
 
-	public void setIpAddress(JTextField ipAddress) {
-		this.ipAddress = ipAddress;
+	private void shutdown() {
+		subscriber.stop();
+		service.shutdown();
+		try {
+			if (!service.awaitTermination(10, TimeUnit.SECONDS)) {
+				service.shutdownNow();
+			}
+		} catch (InterruptedException ex) {
+		}
 	}
-
-	public JTextField getPort() {
-		return port;
-	}
-
-	public void setPort(JTextField port) {
-		this.port = port;
-	}
-
-	public JButton getConnect() {
-		return connect;
-	}
-
-	public void setConnect(JButton connect) {
-		this.connect = connect;
-	}
-
-	
 }
