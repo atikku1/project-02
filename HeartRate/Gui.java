@@ -116,7 +116,7 @@ public class Gui extends JPanel implements ActionListener {
 
 	// Method used to create the initial static GIF
 	private void initializeHeartGif() {
-		ImageIcon ii = new ImageIcon(this.getClass().getResource("static.png"));
+		ImageIcon ii = new ImageIcon(this.getClass().getResource("heart_static.png"));
 		JLabel imageLabel = new JLabel();
 		imageLabel.setIcon(ii);
 		gifPanel.add(imageLabel);
@@ -150,7 +150,7 @@ public class Gui extends JPanel implements ActionListener {
 				buttonConnect.setBackground(Color.GREEN);
 				freqText.setEnabled(true);
 				textPane.setBackground(Color.WHITE);
-				ImageIcon ii = new ImageIcon(this.getClass().getResource("static.png"));
+				ImageIcon ii = new ImageIcon(this.getClass().getResource("heart_static.png"));
 				JLabel imageLabel = new JLabel();
 				imageLabel.setIcon(ii);
 				gifPanel.removeAll();
@@ -161,24 +161,24 @@ public class Gui extends JPanel implements ActionListener {
 
 			if(model.getServerState()) {
 				if (checkButtonSelected()==0)
-					updateHeartGif("slow_heart.gif");
+					updateHeartGif("heart_slow.gif");
 				else if (checkButtonSelected()==1)
-					updateHeartGif("normal_heart.gif");
+					updateHeartGif("heart_moderate.gif");
 				else if (checkButtonSelected()==2)
-					updateHeartGif("fast_heart.gif");
+					updateHeartGif("heart_fast.gif");
 				model.setHeartState(checkButtonSelected());
 			}
 		}
 		
 		if(model.getServerState()) {
 			if (e.getSource() == resting ) {
-				updateHeartGif("slow_heart.gif");
+				updateHeartGif("heart_slow.gif");
 				model.setHeartState(0);
 			} else if (e.getSource() == moderate) {
-				updateHeartGif("normal_heart.gif");
+				updateHeartGif("heart_moderate.gif");
 				model.setHeartState(1);
 			} else if (e.getSource() == vigorous) {
-				updateHeartGif("fast_heart.gif");
+				updateHeartGif("heart_fast.gif");
 				model.setHeartState(2);
 			}
 		}
