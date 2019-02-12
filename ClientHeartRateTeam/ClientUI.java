@@ -1,13 +1,21 @@
 package ClientHeartRateTeam;
 
 import javax.swing.*;
+
+import Client.Subscriber;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ClientUI extends JPanel implements ActionListener {
   private static ClientUI instance = null;
-
+  private final ClientSubscriber  [] subscribers = new ClientSubscriber[5];
+  
+  private final UIElement [] UIelements = new UIElement[5];
+  
+  //private UIElement bciUI= 
+  
   public static ClientUI getInstance() {
     if (instance == null)
       instance = new ClientUI();
@@ -19,13 +27,22 @@ public class ClientUI extends JPanel implements ActionListener {
     this.setBackground(Color.WHITE);
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-    this.add(new UIElement());
-    this.add(new UIElement());
-    this.add(new UIElement());
-    this.add(new UIElement());
-    this.add(new UIElement());
+    
+    for(int i=0 ;i<5;i++) {
+    		this.UIelements[i]=(new UIElement());
+    		this.add(UIelements[i]);
+    }
+    
+    for(int i=0 ;i<5;i++) {
+		this.subscribers[i]=(new ClientSubscriber("localhost",1594));
+    }
+}
+    
+    
+    
+    
 
-  }
+  
 
   @Override
   public void actionPerformed(ActionEvent e) {
