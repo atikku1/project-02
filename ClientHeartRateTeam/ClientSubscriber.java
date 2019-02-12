@@ -23,7 +23,7 @@ public class ClientSubscriber extends Observable implements Runnable {
   private int port;
   private String data;
 
-  public ClientSubscriber(String Ip, int port) {
+  ClientSubscriber(String Ip, int port) {
     this.stop = false;
     this.Ip = Ip;
     this.port = port;
@@ -64,7 +64,8 @@ public class ClientSubscriber extends Observable implements Runnable {
     ObjectInputStream ois = null;
     BufferedReader input = null;
     stop = false;
-    String measureLocal=null;
+    String measureLocal;
+
     try {
       client = new Socket(InetAddress.getByName(Ip.trim()), port);
       input = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -72,18 +73,17 @@ public class ClientSubscriber extends Observable implements Runnable {
     } catch (IOException ex) {
       stop = true;
     }
+
     while (!stop) {
-      System.out.println("in hello");
       try {
         measureLocal= input.readLine();
-        System.out.println("in hello read");
       } catch (IOException sce) {
         measureLocal= null;
       }
       if (measureLocal == null) {
         stop = true;
       } else {
-        System.out.println("in hello read and =" + stop + " " + measureLocal);
+        System.out.println(measureLocal);
         setData(measureLocal);
         setChanged();
         notifyObservers();
@@ -91,21 +91,19 @@ public class ClientSubscriber extends Observable implements Runnable {
       try {
         Thread.sleep(100);
       } catch (InterruptedException ex) {
+        System.out.println("Exception: " + ex);
       }
-      System.out.println("in hello end while" + stop);
     }
-    System.out.println("in hello end loop");
+
     try {
-      if (ois != null) {
+      if (ois != null)
         ois.close();
-      }
-      if (input != null) {
+      if (input != null)
         input.close();
-      }
-      if (client != null) {
+      if (client != null)
         client.close();
-      }
     } catch (IOException e) {
+      System.out.println("Exception: " + e);
     }
     setData("FIN");
     setChanged();

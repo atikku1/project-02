@@ -146,6 +146,7 @@ public class Gui extends JPanel implements ActionListener {
 				}
 			} else if (buttonConnect.getText().compareTo("stop") == 0) {
 				model.stop();
+				textPane.setText("");
 				buttonConnect.setText("run");
 				buttonConnect.setBackground(Color.GREEN);
 				freqText.setEnabled(true);

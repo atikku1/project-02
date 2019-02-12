@@ -2,16 +2,17 @@ package ClientHeartRateTeam;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class ClientUI extends JPanel implements ActionListener {
+public class ClientUI extends JPanel {
 
   private static ClientUI instance = null;
 
-  private final UIElement [] UIelements = new UIElement[5];
+  private List<UIElement> simulators = new ArrayList<>();
   
-  public static ClientUI getInstance() {
+  private static ClientUI getInstance() {
     if (instance == null)
       instance = new ClientUI();
 
@@ -20,18 +21,27 @@ public class ClientUI extends JPanel implements ActionListener {
 
   private ClientUI() {
     this.setBackground(Color.WHITE);
-    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    this.setLayout(new GridLayout(5, 1));
 
-    
     for(int i=0 ;i<5;i++) {
-      this.UIelements[i]=(new UIElement(new ClientSubscriber("localhost",1594)));
-      this.add(UIelements[i]);
+      UIElement uiElement = new UIElement(new ClientSubscriber("localhost",1594));
+      simulators.add(uiElement);
+      this.add(uiElement);
     }
-}
+  }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-
+  private void shutdown() {
+    for (UIElement uiElement: simulators) {
+      uiElement.getSubscriber().stop();
+      uiElement.getService().shutdown();
+      try {
+        if (!uiElement.getService().awaitTermination(10, TimeUnit.SECONDS)) {
+          uiElement.getService().shutdownNow();
+        }
+      } catch (InterruptedException ex) {
+        System.out.println("Exception: " + ex);
+      }
+    }
   }
 
   public static void main(String[] args) {
@@ -42,7 +52,7 @@ public class ClientUI extends JPanel implements ActionListener {
     frame.addWindowListener(new java.awt.event.WindowAdapter() {
       @Override
       public void windowClosing(java.awt.event.WindowEvent e) {
-        //model.shutdown();
+        ClientUI.getInstance().shutdown();
         System.exit(0);
       }
     });
