@@ -21,55 +21,41 @@ import HeartRate.Gui;
 
 public class UIElement extends JPanel implements ActionListener{
 	
-	private  JTextPane dataPane = new JTextPane();
-
-
-
-
-
+	private JTextPane dataPane = new JTextPane();
 	private JTextField ipAddress = new JTextField();
 	private JTextField port = new JTextField();
 	private JButton connect = new JButton();
 	
 	
-	
-	
-	
-	
 	public  UIElement() {
-		// TODO Auto-generated constructor stub
 		this.setBackground(Color.WHITE);
 		this.setLayout(new FlowLayout());
 		
 		this.add(createMainPanel());
 		this.add(createRightButtonGroup());
-		//this.setPreferredSize(new Dimension(200, 200));
-		//Dimension screen = getToolkit().getScreenSize();
-		//this.setSize(screen.width / 2, 3 * screen.height / 6);
-		//this.setLocation((screen.width - getSize().width) / 2, (screen.height - getSize().height) / 2);
-		
 	}
 	
 	Component createRightButtonGroup() {
 		JPanel buttons = new JPanel();
+		buttons.setBackground(Color.WHITE);
+
 		this.ipAddress.setText("localhost");
+		this.port.setText("PORT");
 		this.connect.setText("Connect");
+
 		buttons.add(ipAddress);
 		buttons.add(port);
 		buttons.add(connect);
-		
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
 		
 		return buttons;
-		
-		
-		
 	}
 	
 	
 	
 	Component createMainPanel() {
 		JPanel panel = new JPanel(new GridLayout());
+		panel.setBackground(Color.WHITE);
 
 		this.dataPane.setFont(new Font("Tahoma", Font.BOLD, 12));
 		this.dataPane.setEnabled(false);
@@ -118,26 +104,7 @@ public class UIElement extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Heart Rate Simulator");
-		//frame.getContentPane().setLayout(new GridLayout(1, 1));
-		//frame.setLayout(new GridLayout(1, 1));
-		frame.getContentPane().add(new UIElement());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				//model.shutdown();
-				System.exit(0);
-			}
-		});
-		frame.pack();
-		frame.setPreferredSize(new Dimension(1200, 1200));
-		frame.setVisible(true);
+
 	}
 	
 }
