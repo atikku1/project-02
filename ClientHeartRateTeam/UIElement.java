@@ -19,7 +19,9 @@ import javax.swing.JTextPane;
 
 import HeartRate.Gui;
 
-public class UIElement extends JPanel implements ActionListener{
+public class UIElement extends JPanel{
+
+	private ClientSubscriber subscriber;
 	
 	private JTextPane dataPane = new JTextPane();
 	private JTextField ipAddress = new JTextField();
@@ -27,12 +29,14 @@ public class UIElement extends JPanel implements ActionListener{
 	private JButton connect = new JButton();
 	
 	
-	public  UIElement() {
+	public  UIElement(ClientSubscriber subscriber) {
 		this.setBackground(Color.WHITE);
 		this.setLayout(new FlowLayout());
 		
 		this.add(createMainPanel());
 		this.add(createRightButtonGroup());
+
+		this.subscriber = subscriber;
 	}
 	
 	Component createRightButtonGroup() {
@@ -100,11 +104,6 @@ public class UIElement extends JPanel implements ActionListener{
 	public void setConnect(JButton connect) {
 		this.connect = connect;
 	}
-	
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-	}
 	
 }
