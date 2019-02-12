@@ -233,7 +233,8 @@ public class Gui extends JPanel implements ActionListener {
 			}
 		});
 		frame.pack();
-		frame.setPreferredSize(new Dimension(400, 400));
+		frame.setMinimumSize(new Dimension(367, 510));
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 }
