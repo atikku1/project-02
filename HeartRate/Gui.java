@@ -15,9 +15,9 @@ public class Gui extends JPanel implements ActionListener {
 	private static Gui instance = null;
 	private static Model model;
 
-	private int PORT = 1594;
+	private final int PORT = 1700;
 
-	private JTextField portText = new JTextField("1594");
+	private JTextField portText = new JTextField("1700");
 	private JTextField freqText = new JTextField("1");
 
 	private final JButton buttonConnect = new JButton("run");
@@ -119,6 +119,7 @@ public class Gui extends JPanel implements ActionListener {
 		ImageIcon ii = new ImageIcon(this.getClass().getResource("Resources/heart_static.png"));
 		JLabel imageLabel = new JLabel();
 		imageLabel.setIcon(ii);
+		gifPanel.setBackground(Color.WHITE);
 		gifPanel.add(imageLabel);
 
 	}
