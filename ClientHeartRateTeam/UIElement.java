@@ -114,6 +114,9 @@ public class UIElement extends JPanel implements Observer, ActionListener{
 			this.getParent().repaint();
 		}
 		else {
+			dataPane.setText("Csv file generated in source directory.");
+			this.getParent().revalidate();
+			this.getParent().repaint();
 			close();
 			connect.setText("Connect");
 		}
