@@ -33,7 +33,7 @@ public class ClientUI extends JPanel {
     this.setLayout(new GridLayout(5, 1));
 
     for(int i=0 ;i<5;i++) {
-      UIElement uiElement = new UIElement(new ClientSubscriber("localhost",1594));
+      UIElement uiElement = new UIElement(new ClientSubscriber("",-1));
       simulators.add(uiElement);
       this.add(uiElement);
     }

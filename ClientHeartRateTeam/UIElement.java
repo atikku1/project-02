@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 
@@ -25,6 +26,8 @@ public class UIElement extends JPanel implements Observer, ActionListener{
 	private JTextField ipAddress = new JTextField();
 	private JTextField port = new JTextField();
 	private JButton connect = new JButton();
+	static private final String IPV4_REGEX = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
+	static private Pattern IPV4_PATTERN = Pattern.compile(IPV4_REGEX);
 
 	// Constructor for UI element present in client frame
 	UIElement(ClientSubscriber subscriber) {
@@ -37,6 +40,16 @@ public class UIElement extends JPanel implements Observer, ActionListener{
 		this.add(createRightButtonGroup());
 		this.subscriber = subscriber;
 
+	}
+
+	// Method used to validate the IP
+	public static boolean isValidIPV4(final String s)
+	{
+		if(s.equals("localhost") || s.equals("LOCALHOST"))
+			return true;
+		else {
+			return IPV4_PATTERN.matcher(s).matches();
+		}
 	}
 
 	// Method to get the ExecutorService instance
@@ -69,7 +82,7 @@ public class UIElement extends JPanel implements Observer, ActionListener{
 		return buttons;
 	}
 
-	// Method use dto create main panel in each server element
+	// Method used to create main panel in each server element
 	private Component createMainPanel() {
 		JPanel panel = new JPanel(new GridLayout());
 		panel.setPreferredSize(new Dimension(400, 150));
@@ -88,7 +101,7 @@ public class UIElement extends JPanel implements Observer, ActionListener{
 	// Method used to check if port numbers are in range
 	private boolean isPortValid() {
 		try {
-			return Integer.parseInt(port.getText()) > 0;
+			return Integer.parseInt(port.getText()) > 1024 && Integer.parseInt(port.getText()) < 65536;
 		} catch (NumberFormatException e) {
 			return false;
 		}
@@ -103,19 +116,29 @@ public class UIElement extends JPanel implements Observer, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(connect.getText().equals("Connect")) {
+
+			if (!isValidIPV4(ipAddress.getText())) {
+				JOptionPane.showMessageDialog(new JPanel(), "Invalid IP", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
 			if (!isPortValid()) {
 				JOptionPane.showMessageDialog(new JPanel(), "Invalid PORT", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+
 			dataPane.setText("");
 			connect.setText("Stop");
 			subscriber.setIp(ipAddress.getText());
 			subscriber.setPort(Integer.parseInt(port.getText()));
 			service.submit(subscriber);
 			subscriber.addObserver(this);
+			//JOptionPane.showMessageDialog(new JPanel(), "Connected to "+ ipAddress.getText() + " on PORT: "+ port.getText(), "Information", JOptionPane.INFORMATION_MESSAGE);
+
 		} else {
 			close();
 			connect.setText("Connect");
+			//JOptionPane.showMessageDialog(new JPanel(), "Not connected to "+ ipAddress.getText() + " on PORT: "+ port.getText(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
