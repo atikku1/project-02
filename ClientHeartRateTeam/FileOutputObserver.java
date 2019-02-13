@@ -8,11 +8,19 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * This class is used to generate CSV files from different servers
+ *
+ * @version 20190213
+ *
+ */
+
 public class FileOutputObserver implements Observer {
 
 	private String fileName;
 	private BufferedWriter writer;
 
+	// Constructor for FileOutputObserver class
 	public FileOutputObserver() {
 		
 		// System.out.println( sdf.format(cal.getTime()) );
@@ -25,13 +33,13 @@ public class FileOutputObserver implements Observer {
 		}
 	}
 
+	// Update method used to generate the CSV file and close the writer stream if button is stopped
 	@Override
 	public void update(Observable o, Object arg) {
 
 		ClientSubscriber csObject = (ClientSubscriber) o;
 		String data = csObject.getObject().toString();
 		FileOutputObserver fileOutput = csObject.getFile();
-		//check stop clicked, close the filewriter
 		if (data.equals("FIN")) {
 			try {
 				fileOutput.writer.close();
@@ -40,7 +48,6 @@ public class FileOutputObserver implements Observer {
 			}
 		} else {
 			try {
-				//fileOutput.writer.write(getTimeStamp()+",");
 				fileOutput.writer.write(data);
 				fileOutput.writer.newLine();
 			} catch (IOException e) {
@@ -50,7 +57,7 @@ public class FileOutputObserver implements Observer {
 
 	}
 	
-	
+	// Method used to get the time stamp in String format
 	String getTimeStamp() {
 		return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 	}

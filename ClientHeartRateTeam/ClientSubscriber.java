@@ -12,10 +12,10 @@ import java.util.Observable;
  * ThreadSubscriber. A generic subscriber; get data from a network connection;
  * data is served to local consumers
  *
- * @author javiergs
- * @version 20140915
+ * @version 20190213
  *
  */
+
 public class ClientSubscriber extends Observable implements Runnable {
 
 	private boolean stop;
@@ -24,6 +24,7 @@ public class ClientSubscriber extends Observable implements Runnable {
 	private String data;
 	private FileOutputObserver file;
 
+	// Constructor for Client Subscriber
 	ClientSubscriber(String Ip, int port) {
 		this.stop = false;
 		this.Ip = Ip;
@@ -66,6 +67,7 @@ public class ClientSubscriber extends Observable implements Runnable {
 		stop = true;
 	}
 
+	// This method is used to create a socket connection and run the client UI
 	@Override
 	public void run() {
 

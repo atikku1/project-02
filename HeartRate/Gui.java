@@ -196,7 +196,7 @@ public class Gui extends JPanel implements ActionListener {
 		this.getParent().repaint();
 	}
 
-	// MEthod used to check state of radio buttons selected
+	// Method used to check state of radio buttons selected
 	private int checkButtonSelected(){
 		if(resting.isSelected())
 			return 0;
@@ -206,7 +206,7 @@ public class Gui extends JPanel implements ActionListener {
 			return 2;
 	}
 
-	// Method that is sued to validate the frequency entered
+	// Method that is used to validate the frequency entered
 	private boolean isFrequencyValid() {
 		try {
 			return Double.parseDouble(freqText.getText()) > 0;

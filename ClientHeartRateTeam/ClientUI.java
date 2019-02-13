@@ -6,12 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class is used to design the Client UI for getting data from different servers
+ *
+ * @version 20190213
+ *
+ */
+
+
 public class ClientUI extends JPanel {
 
   private static ClientUI instance = null;
-
   private List<UIElement> simulators = new ArrayList<>();
-  
+
+  // Method used to get instance of the Client UI class
   private static ClientUI getInstance() {
     if (instance == null)
       instance = new ClientUI();
@@ -19,6 +27,7 @@ public class ClientUI extends JPanel {
     return instance;
   }
 
+  // Constructor for creating the client UI to collect data from servers
   private ClientUI() {
     this.setBackground(Color.WHITE);
     this.setLayout(new GridLayout(5, 1));
@@ -30,6 +39,7 @@ public class ClientUI extends JPanel {
     }
   }
 
+  // Method called when the application is shut down
   private void shutdown() {
     for (UIElement uiElement: simulators) {
       uiElement.getSubscriber().stop();
@@ -44,6 +54,7 @@ public class ClientUI extends JPanel {
     }
   }
 
+  // Method to run the Client UI application
   public static void main(String[] args) {
     JFrame frame = new JFrame("Client");
     frame.getContentPane().setLayout(new GridLayout(1, 1));
