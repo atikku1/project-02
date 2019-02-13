@@ -40,7 +40,7 @@ public class FileOutputObserver implements Observer {
 			}
 		} else {
 			try {
-				fileOutput.writer.write(getTimeStamp()+",");
+				//fileOutput.writer.write(getTimeStamp()+",");
 				fileOutput.writer.write(data);
 				fileOutput.writer.newLine();
 			} catch (IOException e) {

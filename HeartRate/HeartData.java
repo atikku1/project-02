@@ -10,10 +10,12 @@ import java.util.List;
 public class HeartData extends Core.Data{
 
   List<Integer> values;
+  private double time;
 
   // Constructor for HeartData class
   public HeartData(double time, List<Integer> values) {
-    super(time, 0);
+	  super(time,0);
+    this.time=time;
     this.values = values;
   }
 
@@ -25,7 +27,9 @@ public class HeartData extends Core.Data{
   // Method to print the heart rate values
   @Override
   public String toString() {
-    return "Heart Rate = " + values.get(0);
+	  
+	  return "time=" + this.time + ", value=" + values.get(0) ;
+   // return "Heart Rate = " + values.get(0);
   }
      
 }
