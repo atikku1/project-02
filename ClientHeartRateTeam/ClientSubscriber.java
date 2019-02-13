@@ -22,7 +22,7 @@ public class ClientSubscriber extends Observable implements Runnable {
 	private String Ip;
 	private int port;
 	private String data;
-	private FileOutput file;
+	private FileOutputObserver file;
 
 	ClientSubscriber(String Ip, int port) {
 		this.stop = false;
@@ -54,11 +54,11 @@ public class ClientSubscriber extends Observable implements Runnable {
 		return this.data;
 	}
 
-	public FileOutput getFile() {
+	public FileOutputObserver getFile() {
 		return file;
 	}
 
-	public void setFile(FileOutput file) {
+	public void setFile(FileOutputObserver file) {
 		this.file = file;
 	}
 
@@ -79,7 +79,7 @@ public class ClientSubscriber extends Observable implements Runnable {
 			client = new Socket(InetAddress.getByName(Ip.trim()), port);
 			input = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			client.setSoTimeout(1000);
-			file = new FileOutput();
+			file = new FileOutputObserver();
 			this.addObserver(file);
 		} catch (IOException ex) {
 			stop = true;
