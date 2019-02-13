@@ -18,96 +18,107 @@ import java.util.Observable;
  */
 public class ClientSubscriber extends Observable implements Runnable {
 
-  private boolean stop;
-  private String Ip;
-  private int port;
-  private String data;
+	private boolean stop;
+	private String Ip;
+	private int port;
+	private String data;
+	private FileOutput file;
 
-  ClientSubscriber(String Ip, int port) {
-    this.stop = false;
-    this.Ip = Ip;
-    this.port = port;
-  }
+	ClientSubscriber(String Ip, int port) {
+		this.stop = false;
+		this.Ip = Ip;
+		this.port = port;
+	}
 
-  public String getIp() {
-    return Ip;
-  }
+	public String getIp() {
+		return Ip;
+	}
 
-  public void setIp(String ip) {
-    Ip = ip;
-  }
+	public void setIp(String ip) {
+		Ip = ip;
+	}
 
-  public int getPort() {
-    return port;
-  }
+	public int getPort() {
+		return port;
+	}
 
-  public void setPort(int port) {
-    this.port = port;
-  }
+	public void setPort(int port) {
+		this.port = port;
+	}
 
-  protected synchronized void setData(String data) {
-    this.data = data;
-  }
+	protected synchronized void setData(String data) {
+		this.data = data;
+	}
 
-  public synchronized Object getObject() {
-    return this.data;
-  }
+	public synchronized Object getObject() {
+		return this.data;
+	}
 
-  public void stop() {
-    stop = true;
-  }
+	public FileOutput getFile() {
+		return file;
+	}
 
-  @Override
-  public void run() {
+	public void setFile(FileOutput file) {
+		this.file = file;
+	}
 
-    Socket client = null;
-    ObjectInputStream ois = null;
-    BufferedReader input = null;
-    stop = false;
-    String measureLocal;
+	public void stop() {
+		stop = true;
+	}
 
-    try {
-      client = new Socket(InetAddress.getByName(Ip.trim()), port);
-      input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-      client.setSoTimeout(1000);
-    } catch (IOException ex) {
-      stop = true;
-    }
+	@Override
+	public void run() {
 
-    while (!stop) {
-      try {
-        measureLocal= input.readLine();
-      } catch (IOException sce) {
-        measureLocal= null;
-      }
-      if (measureLocal == null) {
-        stop = true;
-      } else {
-        System.out.println(measureLocal);
-        setData(measureLocal);
-        setChanged();
-        notifyObservers();
-      }
-      try {
-        Thread.sleep(100);
-      } catch (InterruptedException ex) {
-        System.out.println("Exception: " + ex);
-      }
-    }
+		Socket client = null;
+		ObjectInputStream ois = null;
+		BufferedReader input = null;
+		stop = false;
+		String measureLocal;
 
-    try {
-      if (ois != null)
-        ois.close();
-      if (input != null)
-        input.close();
-      if (client != null)
-        client.close();
-    } catch (IOException e) {
-      System.out.println("Exception: " + e);
-    }
-    setData("FIN");
-    setChanged();
-    notifyObservers();
-  }
+		try {
+			client = new Socket(InetAddress.getByName(Ip.trim()), port);
+			input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			client.setSoTimeout(1000);
+			file = new FileOutput();
+			this.addObserver(file);
+		} catch (IOException ex) {
+			stop = true;
+		}
+
+		while (!stop) {
+			try {
+				measureLocal = input.readLine();
+			} catch (IOException sce) {
+				measureLocal = null;
+			}
+			if (measureLocal == null) {
+				stop = true;
+			} else {
+				System.out.println(measureLocal);
+				setData(measureLocal);
+				setChanged();
+				notifyObservers();
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ex) {
+				System.out.println("Exception: " + ex);
+			}
+		}
+
+		try {
+			if (ois != null)
+				ois.close();
+			if (input != null)
+				input.close();
+			if (client != null)
+				client.close();
+		} catch (IOException e) {
+			System.out.println("Exception: " + e);
+		}
+		setData("FIN");
+		setChanged();
+		notifyObservers();
+	}
 
 }
